@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny
 
 from .models import User
 from .permissions import IsAdmin, IsUser
-from .serializers import UserSerializer, UserDetailSerializer
+from .serializers import UserDetailSerializer, UserSerializer
 
 
 class UserListApiView(ListAPIView):

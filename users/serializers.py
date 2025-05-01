@@ -1,12 +1,13 @@
 from rest_framework.serializers import ModelSerializer
 
-# from advertisement.serializers import AdvertisementSerializer
-
 from .models import User
+
+from advertisements.serializers import AdvertisementSerializer, ReviewSerializer
 
 
 class UserSerializer(ModelSerializer):
-    # advertisements = AdvertisementSerializer(many=True, read_only=True)
+    advertisements = AdvertisementSerializer(many=True, read_only=True)
+    reviews = ReviewSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
@@ -18,12 +19,14 @@ class UserSerializer(ModelSerializer):
             "email",
             "role",
             "image",
-            # "advertisements",
+            "advertisements",
+            "reviews",
         ]
 
 
 class UserDetailSerializer(ModelSerializer):
-    # advertisements = AdvertisementSerializer(many=True, read_only=True)
+    advertisements = AdvertisementSerializer(many=True, read_only=True)
+    reviews = ReviewSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
@@ -33,5 +36,6 @@ class UserDetailSerializer(ModelSerializer):
             "phone",
             "email",
             "image",
-            # "advertisements",
+            "advertisements",
+            "reviews",
         ]
