@@ -21,7 +21,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # path("advertisments/", include("advertisments.urls", namespace="advertisments")),
+    path("advertisements/", include("advertisements.urls", namespace="advertisements")),
     path("users/", include("users.urls", namespace="users")),
     path(
         "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
@@ -36,4 +36,3 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
