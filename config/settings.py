@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "drf_yasg",
     "corsheaders",
-    "advertisement",
+    "advertisements",
     "users",
 ]
 
@@ -141,7 +141,7 @@ if CACHE_ENABLED:
     }
 
 CORS_ALLOWED_ORIGINS = [
-    '<http://localhost:8000>',
+    "https://read-and-write.example.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
