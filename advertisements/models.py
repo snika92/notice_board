@@ -30,12 +30,12 @@ class Advertisement(models.Model):
         ordering = ["-created_at"]
 
 
-class Review(models.Model):
+class Comment(models.Model):
     text = models.TextField(null=True, blank=True, verbose_name="Текст отзыва")
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name="Владелец отзыва",
-        related_name="reviews",
+        related_name="comments",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -43,7 +43,10 @@ class Review(models.Model):
     advertisement = models.ForeignKey(
         Advertisement,
         verbose_name="Объявление",
+        null=True,
+        blank=True,
         on_delete=models.CASCADE,
+        related_name="comments",
     )
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Время и дата создания отзыва"

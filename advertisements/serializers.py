@@ -3,28 +3,36 @@ from rest_framework.serializers import ModelSerializer
 
 from users.models import User
 
-from .models import Advertisement, Review
+from .models import Advertisement, Comment
 
 
 class AdvertisementSerializer(ModelSerializer):
-    owner = SerializerMethodField()
+    author = SerializerMethodField()
+    comments_count = SerializerMethodField()
 
-    def get_owner(self, advertisement):
+    def get_author(self, advertisement):
         return [
-            owner.email for owner in User.objects.filter(adverticements=advertisement)
+            author.email for author in User.objects.filter(advertisements=advertisement)
         ]
+
+    def get_comments_count(self, obj):
+        return obj.comments.count()
 
     class Meta:
         model = Advertisement
-        fields = "__all__"
+        fields = ["pk", "title", "price", "description", "author", "created_at", "comments_count"]
 
 
-class ReviewSerializer(ModelSerializer):
-    owner = SerializerMethodField()
+class CommentSerializer(ModelSerializer):
+    author = SerializerMethodField()
+    advertisement = SerializerMethodField()
 
-    def get_owner(self, review):
-        return [owner.email for owner in User.objects.filter(reviews=review)]
+    def get_author(self, review):
+        return [author.email for author in User.objects.filter(reviews=review)]
+
+    def get_advertisement(self, comment):
+        return [advertisement.title for advertisement in Advertisement.objects.filter(comments=comment)]
 
     class Meta:
-        model = Review
+        model = Comment
         fields = "__all__"

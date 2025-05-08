@@ -13,8 +13,8 @@ class User(AbstractUser):
     ]
 
     username = None
-    first_name = models.CharField(max_length=50, verbose_name="Имя пользователя")
-    last_name = models.CharField(max_length=50, verbose_name="Фамилия пользователя")
+    first_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Имя пользователя")
+    last_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Фамилия пользователя")
     phone = PhoneNumberField(
         blank=True,
         null=True,
@@ -33,9 +33,6 @@ class User(AbstractUser):
         null=True,
         verbose_name="Аватар",
         help_text="Загрузите свой аватар",
-    )
-    token = models.CharField(
-        max_length=100, verbose_name="Token", blank=True, null=True
     )
 
     USERNAME_FIELD = "email"

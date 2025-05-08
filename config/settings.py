@@ -107,7 +107,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
 EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", default=2525))
 EMAIL_USE_TLS = True if os.getenv("EMAIL_USE_TLS") == "True" else False
 EMAIL_USE_SSL = True if os.getenv("EMAIL_USE_SSL") == "True" else False
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
@@ -141,7 +141,7 @@ if CACHE_ENABLED:
     }
 
 CORS_ALLOWED_ORIGINS = [
-    "https://read-and-write.example.com",
+    'http://127.0.0.1:8000'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
