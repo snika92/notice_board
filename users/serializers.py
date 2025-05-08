@@ -1,17 +1,19 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.fields import SerializerMethodField
+from rest_framework.serializers import ModelSerializer, Serializer, EmailField, CharField
 
 from .models import User
 
-from advertisements.serializers import AdvertisementSerializer, ReviewSerializer
+from advertisements.serializers import AdvertisementSerializer, CommentSerializer
 
 
 class UserSerializer(ModelSerializer):
-    advertisements = AdvertisementSerializer(many=True, read_only=True)
-    reviews = ReviewSerializer(many=True, read_only=True)
+    advertisements= AdvertisementSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
         fields = [
+            "pk",
             "password",
             "first_name",
             "last_name",
@@ -20,22 +22,44 @@ class UserSerializer(ModelSerializer):
             "role",
             "image",
             "advertisements",
-            "reviews",
+            "comments",
         ]
 
 
 class UserDetailSerializer(ModelSerializer):
-    advertisements = AdvertisementSerializer(many=True, read_only=True)
-    reviews = ReviewSerializer(many=True, read_only=True)
+    advertisements_count = SerializerMethodField()
+    comments_count = SerializerMethodField()
+
+    def get_advertisements_count(self, obj):
+        return obj.advertisements.count()
+
+    def get_comments_count(self, obj):
+        return obj.comments.count()
 
     class Meta:
         model = User
         fields = [
+            "pk",
             "first_name",
             "last_name",
             "phone",
             "email",
             "image",
-            "advertisements",
-            "reviews",
+            "advertisements_count",
+            "comments_count",
         ]
+
+
+class UserResetPasswordSerializer(Serializer):
+
+    email = EmailField()
+
+
+class UserResetPasswordConfirmSerializer(Serializer):
+    uid = CharField()
+    token = CharField()
+    new_password = CharField(
+        style={'input_type': 'password'},
+        min_length=8,
+        write_only=True
+    )
