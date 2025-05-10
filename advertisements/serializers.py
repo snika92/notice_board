@@ -20,18 +20,29 @@ class AdvertisementSerializer(ModelSerializer):
 
     class Meta:
         model = Advertisement
-        fields = ["pk", "title", "price", "description", "author", "created_at", "comments_count"]
+        fields = [
+            "pk",
+            "title",
+            "price",
+            "description",
+            "author",
+            "created_at",
+            "comments_count",
+        ]
 
 
 class CommentSerializer(ModelSerializer):
     author = SerializerMethodField()
     advertisement = SerializerMethodField()
 
-    def get_author(self, review):
-        return [author.email for author in User.objects.filter(reviews=review)]
+    def get_author(self, comment):
+        return [author.email for author in User.objects.filter(comments=comment)]
 
     def get_advertisement(self, comment):
-        return [advertisement.title for advertisement in Advertisement.objects.filter(comments=comment)]
+        return [
+            advertisement.title
+            for advertisement in Advertisement.objects.filter(comments=comment)
+        ]
 
     class Meta:
         model = Comment
