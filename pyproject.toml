@@ -23,6 +23,9 @@ drf-yasg = "^1.21.10"
 redis = "^5.2.1"
 requests = "^2.32.3"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "^8.1.0"}
+pytest = "^8.3.5"
+pytest-django = "^4.11.1"
+pytest-cov = "^6.1.1"
 
 
 [build-system]
