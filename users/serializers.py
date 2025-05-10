@@ -1,13 +1,15 @@
 from rest_framework.fields import SerializerMethodField
-from rest_framework.serializers import ModelSerializer, Serializer, EmailField, CharField
+from rest_framework.serializers import (CharField, EmailField, ModelSerializer,
+                                        Serializer)
+
+from advertisements.serializers import (AdvertisementSerializer,
+                                        CommentSerializer)
 
 from .models import User
 
-from advertisements.serializers import AdvertisementSerializer, CommentSerializer
-
 
 class UserSerializer(ModelSerializer):
-    advertisements= AdvertisementSerializer(many=True, read_only=True)
+    advertisements = AdvertisementSerializer(many=True, read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
@@ -59,7 +61,5 @@ class UserResetPasswordConfirmSerializer(Serializer):
     uid = CharField()
     token = CharField()
     new_password = CharField(
-        style={'input_type': 'password'},
-        min_length=8,
-        write_only=True
+        style={"input_type": "password"}, min_length=8, write_only=True
     )

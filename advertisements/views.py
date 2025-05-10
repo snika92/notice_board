@@ -71,7 +71,7 @@ class CommentCreateApiView(CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        ad_id = self.kwargs['ad_pk']
+        ad_id = self.kwargs["ad_pk"]
         ad = Advertisement.objects.get(pk=ad_id)
 
         new_comment = serializer.save()
@@ -88,7 +88,7 @@ class CommentListApiView(ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
-        ad_pk = self.kwargs['ad_pk']
+        ad_pk = self.kwargs["ad_pk"]
         return Comment.objects.filter(advertisement_id=ad_pk)
 
 

@@ -1,20 +1,22 @@
-from config import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from rest_framework import status
 from rest_framework.generics import (CreateAPIView, DestroyAPIView,
-                                     ListAPIView, RetrieveAPIView,
-                                     UpdateAPIView, GenericAPIView)
+                                     GenericAPIView, ListAPIView,
+                                     RetrieveAPIView, UpdateAPIView)
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework import status
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
+from config import settings
 
 from .models import User
 from .permissions import IsAdmin, IsUser
-from .serializers import UserDetailSerializer, UserSerializer, UserResetPasswordSerializer, \
-    UserResetPasswordConfirmSerializer
+from .serializers import (UserDetailSerializer,
+                          UserResetPasswordConfirmSerializer,
+                          UserResetPasswordSerializer, UserSerializer)
 
 
 class UserListApiView(ListAPIView):
@@ -78,8 +80,10 @@ class UserResetPasswordApiView(GenericAPIView):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return Response(data={"detail": "Пользователь с таким email не найден"},
-                            status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                data={"detail": "Пользователь с таким email не найден"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -106,7 +110,10 @@ class UserResetPasswordApiView(GenericAPIView):
             fail_silently=False,
         )
 
-        return Response(data={"detail": "Ссылка для сброса пароля отправлена на ваш email"}, status=status.HTTP_200_OK)
+        return Response(
+            data={"detail": "Ссылка для сброса пароля отправлена на ваш email"},
+            status=status.HTTP_200_OK,
+        )
 
 
 class UserResetPasswordConfirmApiView(GenericAPIView):
@@ -118,24 +125,23 @@ class UserResetPasswordConfirmApiView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
 
         try:
-            uid = urlsafe_base64_decode(serializer.validated_data['uid']).decode()
+            uid = urlsafe_base64_decode(serializer.validated_data["uid"]).decode()
             user = User.objects.get(pk=uid)
         except User.DoesNotExist:
             return Response(
                 {"detail": "Неверная ссылка для сброса пароля"},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if not default_token_generator.check_token(user, serializer.validated_data['token']):
+        if not default_token_generator.check_token(
+            user, serializer.validated_data["token"]
+        ):
             return Response(
                 {"detail": "Неверная ссылка для сброса пароля"},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
-        user.set_password(serializer.validated_data['new_password'])
+        user.set_password(serializer.validated_data["new_password"])
         user.save()
 
-        return Response(
-            {"detail": "Пароль успешно изменен"},
-            status=status.HTTP_200_OK
-        )
+        return Response({"detail": "Пароль успешно изменен"}, status=status.HTTP_200_OK)
