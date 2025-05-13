@@ -15,21 +15,11 @@ urlpatterns = [
     path("user/", UserSelfListApiView.as_view(), name="user_retrieve"),
     path("<int:pk>/update/", UserUpdateApiView.as_view(), name="user_update"),
     path("<int:pk>/delete/", UserDestroyApiView.as_view(), name="user_delete"),
+
     path("register/", UserCreateAPIView.as_view(), name="register"),
-    path(
-        "login/",
-        TokenObtainPairView.as_view(permission_classes=(AllowAny,)),
-        name="login",
-    ),
-    path(
-        "token/refresh/",
-        TokenRefreshView.as_view(permission_classes=(AllowAny,)),
-        name="token_refresh",
-    ),
+    path("login/", TokenObtainPairView.as_view(permission_classes=(AllowAny,)), name="login",),
+    path("token/refresh/", TokenRefreshView.as_view(permission_classes=(AllowAny,)), name="token_refresh",),
+
     path("reset_password/", UserResetPasswordApiView.as_view(), name="password_reset"),
-    path(
-        "reset_password_confirm/",
-        UserResetPasswordConfirmApiView.as_view(),
-        name="password_reset_confirm",
-    ),
+    path("reset_password_confirm/", UserResetPasswordConfirmApiView.as_view(), name="password_reset_confirm",),
 ]
